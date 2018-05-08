@@ -1,6 +1,6 @@
 本项目模拟购票app，首先根据手机定位所在地，查询当地上映影片信息，然后在自己搭建的服务器上创建测试数据，模拟影院信息。判断用户登录状态，然后开始购票操作
 1.影片展示
-    ![display](https://github.com/19940901/TinyMovieApp/tree/master/images/display.jpg)
+    ![display](https://github.com/19940901/TinyMovieApp/tree/blob/master/images/display.jpg)
 2.影片详情
     ![detail](https://github.com/19940901/TinyMovieApp/tree/master/images/moviedetail.jpg)
 3.menu
