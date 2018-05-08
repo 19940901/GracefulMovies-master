@@ -1,5 +1,11 @@
 package com.cb.project.gracefulmovies.server;
 
+import android.app.Application;
+import android.content.Context;
+import com.franmontiel.persistentcookiejar.ClearableCookieJar;
+import com.franmontiel.persistentcookiejar.PersistentCookieJar;
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 import com.ihsanbal.logging.Level;
 import com.ihsanbal.logging.LoggingInterceptor;
 import com.cb.project.gracefulmovies.BuildConfig;
@@ -29,6 +35,7 @@ class ApiClient {
 
         mOkHttpClientBuilder = new OkHttpClient.Builder();
         mOkHttpClientBuilder.connectTimeout(15, TimeUnit.SECONDS);
+
         if (BuildConfig.DEBUG) {
             mOkHttpClientBuilder.addNetworkInterceptor(
                     new LoggingInterceptor.Builder()
@@ -37,6 +44,7 @@ class ApiClient {
                             .log(Platform.INFO)
                             .request("Request")
                             .response("Response")
+
                             .build()
             );
         }
@@ -53,6 +61,17 @@ class ApiClient {
                 .client(mOkHttpClientBuilder.build())
                 .build()
                 .create(ApiClass);
+    }
+
+    <S> S createApi(String baseUrl, Class<S> ApiClass,Context context){
+        //持久化cookie
+        //mOkHttpClientBuilder.interceptors().add(new AddCookiesInterceptor(this,"text"));
+        mRetrofitBuilder.baseUrl(baseUrl);
+        ClearableCookieJar cookieJar=new PersistentCookieJar(new SetCookieCache(),new SharedPrefsCookiePersistor(context));
+        mOkHttpClientBuilder.cookieJar(cookieJar);
+
+       return createApi(ApiClass);
+
     }
 
 }

@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.xw.project.gracefulmovies.view.activity.SplashActivity">
+    tools:context="com.cb.project.gracefulmovies.view.activity.SplashActivity">
 
     <com.flaviofaria.kenburnsview.KenBurnsView
         android:id="@+id/splash_bg_img"

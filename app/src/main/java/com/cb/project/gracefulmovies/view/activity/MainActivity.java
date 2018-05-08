@@ -1,5 +1,6 @@
 package com.cb.project.gracefulmovies.view.activity;
 
+import android.app.Application;
 import android.content.*;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -30,6 +31,11 @@ import android.widget.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
+import com.cb.project.gracefulmovies.R;
+import com.cb.project.gracefulmovies.dialog.LoginDialogFragment;
+import com.cb.project.gracefulmovies.dialog.PhoneDialogFragment;
+import com.cb.project.gracefulmovies.model.LoginResult;
+import com.cb.project.gracefulmovies.model.Uorder;
 import com.cb.project.gracefulmovies.presenter.IMainActivityPresenter;
 import com.cb.project.gracefulmovies.presenter.impl.MainActivityPresenterImpl;
 import com.cb.project.gracefulmovies.util.PrefUtil;
@@ -38,6 +44,7 @@ import com.cb.project.gracefulmovies.view.adapter.TabPagerAdapter;
 import com.cb.project.gracefulmovies.view.fragment.MovieListFragment;
 import com.cb.project.gracefulmovies.view.iview.IMainActivity;
 import com.cb.project.gracefulmovies.view.service.LocationService;
+import com.cb.project.gracefulmovies.view.service.UserService;
 import com.cb.project.gracefulmovies.view.widget.UnScrollableViewPager;
 import org.polaric.colorful.Colorful;
 
@@ -62,6 +69,7 @@ public class MainActivity extends CheckPermissionsActivity implements Navigation
     RadioButton mNowBtn;
     @BindView(com.cb.project.gracefulmovies.R.id.coming_radio)
     RadioButton mComingBtn;
+    private boolean loginFlag = true;
 
     private View mStatusView;
     private ImageView mStatusLoadingImg;
@@ -79,6 +87,18 @@ public class MainActivity extends CheckPermissionsActivity implements Navigation
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        clearSp();
+
+        //测试login
+        setContentView(com.cb.project.gracefulmovies.R.layout.activity_main);
+       // PhoneDialogFragment fragment = new PhoneDialogFragment();
+        //登录检查
+        new UserService(this).loadDatas(this);
+
+
+
+
 
         transparentStatusBar();
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
@@ -294,6 +314,21 @@ public class MainActivity extends CheckPermissionsActivity implements Navigation
                 break;
             case com.cb.project.gracefulmovies.R.id.nav_about:
                 navigate(AboutActivity.class);
+                break;
+            case  R.id.nav_mine:
+                SharedPreferences user = getSharedPreferences("user", Application.MODE_PRIVATE);
+                String name = user.getString("name", "");
+                String id = user.getString("id", "");
+                if (null != name && null != id && !name.isEmpty() && !id.isEmpty()) {
+
+                    Intent intent1=new Intent(this,MyOrderActivity.class);
+                    intent1.putExtra("id",id);
+                    startActivity(intent1);
+
+                } else {
+                    LoginDialogFragment fragment = LoginDialogFragment.newInstance("login");
+                    fragment.show(getFragmentManager(), "login");
+                }
                 break;
         }
 
@@ -537,5 +572,36 @@ public class MainActivity extends CheckPermissionsActivity implements Navigation
             }
         });
         builder.show();
+    }
+
+    public void checkCookie(LoginResult loginResult) {
+
+        if (null != loginResult && loginResult.getState().equals("true")) {
+            SharedPreferences user = getSharedPreferences("user",  Application.MODE_PRIVATE);
+            SharedPreferences.Editor editor = user.edit();
+            editor.putString("id", loginResult.getId());
+            editor.putString("name", loginResult.getName());
+            editor.commit();
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+
+
+
+            builder.setTitle("登录" + loginResult.getState());
+
+            builder.show();
+
+
+        } else {
+            LoginDialogFragment fragment = LoginDialogFragment.newInstance("login");
+            fragment.show(getFragmentManager(), "login");
+        }
+
+    }
+
+    public void  clearSp(){
+        SharedPreferences user = getSharedPreferences("user",  Application.MODE_PRIVATE);
+        SharedPreferences.Editor edit = user.edit();
+        edit.clear();
+        edit.commit();
     }
 }

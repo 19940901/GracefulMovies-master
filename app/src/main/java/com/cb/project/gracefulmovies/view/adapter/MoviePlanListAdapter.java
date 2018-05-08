@@ -13,15 +13,15 @@ import com.cb.project.gracefulmovies.model.PlanModel;
 import com.cb.project.gracefulmovies.view.activity.MainActivity;
 import com.cb.project.gracefulmovies.view.activity.MovieTableActivity;
 
-public class MoviePlanListAdapter extends BaseRecyclerAdapter<PlanModel,MoviePlanListAdapter.PlanVH>{
+public class MoviePlanListAdapter extends BaseRecyclerAdapter<PlanModel, MoviePlanListAdapter.PlanVH> {
     private static String moviename;
 
     public MoviePlanListAdapter(String moviename) {
-        this.moviename=moviename;
+        this.moviename = moviename;
     }
+
     @Override
-    protected PlanVH onCreate(LayoutInflater inflater, ViewGroup parent, int viewType)
-    {
+    protected PlanVH onCreate(LayoutInflater inflater, ViewGroup parent, int viewType) {
         if (viewType == TYPE_NO_DATA) {
             return new MoviePlanListAdapter.PlanVH(inflater.inflate(R.layout.layout_place_holder, parent, false));
         }
@@ -35,7 +35,8 @@ public class MoviePlanListAdapter extends BaseRecyclerAdapter<PlanModel,MoviePla
                     ? mContext.getString(R.string.data_loading) : mContext.getString(R.string.has_no_data));
             return;
         }
-        PlanModel planModel=  mData.get(position);
+        PlanModel planModel = mData.get(position);
+        holder.setPlan(planModel);
         holder.text1.setText(moviename);
         holder.text2.setText(planModel.getStartTime());
         holder.text3.setText(planModel.getSumTime());
@@ -51,27 +52,43 @@ public class MoviePlanListAdapter extends BaseRecyclerAdapter<PlanModel,MoviePla
                 ObjectAnimator.ofFloat(view, View.TRANSLATION_Y, 100, 0).setDuration(400)
         };
     }
-    class PlanVH extends BaseRecyclerViewHolder{
+
+    class PlanVH extends BaseRecyclerViewHolder {
 
         TextView nametext;
-        TextView text1,text2,text3,text4,text5;
+        TextView text1, text2, text3, text4, text5;
+        PlanModel plan;
 
         public PlanVH(final View itemView) {
             super(itemView);
 
-            nametext=findView(R.id.plan_name_text);
-            text1=findView(R.id.plan_text_1);
-            text2=findView(R.id.plan_text_2);
-            text3=findView(R.id.plan_text_3);
-            text4=findView(R.id.plan_text_4);
-            text5=findView(R.id.plan_text_5);
+
+            nametext = findView(R.id.plan_name_text);
+            text1 = findView(R.id.plan_text_1);
+            text2 = findView(R.id.plan_text_2);
+            text3 = findView(R.id.plan_text_3);
+            text4 = findView(R.id.plan_text_4);
+            text5 = findView(R.id.plan_text_5);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    itemView.getContext().startActivity(new Intent(itemView.getContext(), MovieTableActivity.class));
+                    Intent intent = new Intent(itemView.getContext(), MovieTableActivity.class);
+
+                    intent.putExtra("plan",plan);
+
+                    itemView.getContext().startActivity(intent);
                 }
             });
+
+        }
+
+        public PlanModel getPlan() {
+            return plan;
+        }
+
+        public void setPlan(PlanModel plan) {
+            this.plan = plan;
         }
     }
 

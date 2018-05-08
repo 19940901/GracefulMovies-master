@@ -74,6 +74,10 @@
                 android:name=".view.activity.MovieTableActivity"
                 android:label="选取座位"
                 android:screenOrientation="portrait"/>
+        <activity
+                android:name=".view.activity.MyOrderActivity"
+                android:label="我的影票"
+                android:screenOrientation="portrait"/>
 
 
         <service

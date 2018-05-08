@@ -1,9 +1,8 @@
 package com.cb.project.gracefulmovies.server;
 
 
-import com.cb.project.gracefulmovies.server.api.BoxOfficeApi;
-import com.cb.project.gracefulmovies.server.api.MovieApi;
-import com.cb.project.gracefulmovies.server.api.NetLocApi;
+import android.content.Context;
+import com.cb.project.gracefulmovies.server.api.*;
 import com.cb.project.gracefulmovies.model.*;
 import com.cb.project.gracefulmovies.server.api.BoxOfficeApi;
 import com.cb.project.gracefulmovies.server.api.MovieApi;
@@ -13,7 +12,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import com.cb.project.gracefulmovies.server.api.PlanApi;
+import com.cb.project.gracefulmovies.view.activity.MainActivity;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -34,6 +33,10 @@ public class ApiHelper {
     private static NetLocApi netLocApi;
     private static BoxOfficeApi boxOfficeApi;
     private static PlanApi planApi;
+    private static MovieTableApi tableApi;
+    private static LoginApi loginApi;
+    private static AddOrderapi addOrderapi;
+    private static LoadOrderApi loadOrderApi;
 
     public static void init(String apiKeyJH, String appId) {
         API_KEY_JH = apiKeyJH;
@@ -65,11 +68,48 @@ public class ApiHelper {
         return boxOfficeApi;
     }
 
+    //获取放映表
     private static PlanApi getPlanApi() {
         if (planApi == null) {
             planApi = new ApiClient().createApi("http://119.23.213.11:8080/back/act/plans/", PlanApi.class);
         }
         return planApi;
+    }
+
+    //获取已售出座位
+    private static MovieTableApi getTableApi() {
+        if (tableApi == null) {
+            tableApi = new ApiClient().createApi("http://119.23.213.11:8080/back/act/seats/", MovieTableApi.class);
+        }
+        return tableApi;
+    }
+
+    //获取用户登录状态
+    private static LoginApi getLoginApi(Context context) {
+        if (null == loginApi) {
+            loginApi = new ApiClient().createApi("http://119.23.213.11:8080/back/user/userlogin/", LoginApi.class,context);
+        }
+        return loginApi;
+    }
+
+    /*
+    添加订单
+     */
+    private  static AddOrderapi AddOrderapi(){
+        if(null==addOrderapi){
+            addOrderapi=new ApiClient().createApi("http://119.23.213.11:8080/back/act/addOrder/",AddOrderapi.class);
+        }
+        return addOrderapi;
+    }
+    /*
+    获取订单
+     */
+    private static LoadOrderApi loadOrderApi(){
+        if(null==loadOrderApi){
+            loadOrderApi=new ApiClient().createApi("http://119.23.213.11:8080/back/act/orders/",LoadOrderApi.class);
+
+        }
+        return loadOrderApi;
     }
 
     /**
@@ -173,6 +213,47 @@ public class ApiHelper {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    /**
+     * 加载座位
+     */
+    public static Observable<List<String>> loadSeats(String id) {
+        return getTableApi()
+                .getmovieTable(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 登录信息
+     */
+    public static Observable<LoginResult> loginState(String name, String psw,Context context) {
+        return getLoginApi(context)
+                .LoginState(name, psw)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+    }
+
+    /*
+    添加订单
+     */
+    public static  Observable<orderResult> addOrder(Uorder u){
+        return AddOrderapi()
+                .addorder(u.getState(),u.getPrice(),u.getPlan_id(),u.getSeatNumber(),u.getUser_id() )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /*
+    获取订单
+     */
+public static Observable<List<Order>> loadOrder(int id){
+    return loadOrderApi()
+            .loadOrder(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread());
+}
+
     public static void releaseNetLocApi() {
         netLocApi = null;
     }
@@ -184,5 +265,14 @@ public class ApiHelper {
     public static void releasePlanApi() {
         planApi = null;
     }
+
+    public static void releaseLoginApi() {
+        loginApi = null;
+    }
+
+
+
+
+
 
 }

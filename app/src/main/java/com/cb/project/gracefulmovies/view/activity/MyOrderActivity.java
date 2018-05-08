@@ -1,54 +1,46 @@
 package com.cb.project.gracefulmovies.view.activity;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.cb.project.gracefulmovies.model.BoxOfficeModel;
-import com.cb.project.gracefulmovies.presenter.IBoxOfficeActivityPresenter;
-import com.cb.project.gracefulmovies.presenter.impl.BoxOfficeActivityPresenterImpl;
+import com.cb.project.gracefulmovies.R;
+import com.cb.project.gracefulmovies.model.Order;
+import com.cb.project.gracefulmovies.model.Uorder;
+import com.cb.project.gracefulmovies.presenter.IOrderpresenter;
+import com.cb.project.gracefulmovies.presenter.impl.OrderPresenterImpl;
 import com.cb.project.gracefulmovies.server.ApiHelper;
-import com.cb.project.gracefulmovies.view.adapter.BoxOfficeListAdapter;
-import com.cb.project.gracefulmovies.view.iview.IBoxOfficeActivity;
+import com.cb.project.gracefulmovies.view.adapter.MyOrderAdaptor;
+import com.cb.project.gracefulmovies.view.iview.IMyOrderActivity;
 import org.polaric.colorful.Colorful;
 
 import java.util.List;
 
-/**
- * 票房
- * <p/>
- * Created by xoxingxiao on 2017-03-07.
- */
-public class BoxOfficeActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener,
-        IBoxOfficeActivity {
-
+public class MyOrderActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, IMyOrderActivity {
     @BindView(com.cb.project.gracefulmovies.R.id.swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(com.cb.project.gracefulmovies.R.id.recycler_view)
     RecyclerView mRecyclerView;
 
-    private BoxOfficeListAdapter mAdapter;
-    private IBoxOfficeActivityPresenter mPresenter;
+
+    private IOrderpresenter orderpresenter;
+    private MyOrderAdaptor mAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(com.cb.project.gracefulmovies.R.layout.activity_box_office);
+        setContentView(R.layout.activity_my_order);
         ButterKnife.bind(this);
-
         initializeToolbar();
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(com.cb.project.gracefulmovies.R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +49,6 @@ public class BoxOfficeActivity extends BaseActivity implements SwipeRefreshLayou
                     mRecyclerView.smoothScrollToPosition(0);
             }
         });
-
         mSwipeRefreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(this, Colorful.getThemeDelegate().getAccentColor().getColorRes()),
                 ContextCompat.getColor(this, Colorful.getThemeDelegate().getPrimaryColor().getColorRes())
@@ -67,45 +58,29 @@ public class BoxOfficeActivity extends BaseActivity implements SwipeRefreshLayou
         mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
+        Intent intent = getIntent();
+        String user_id = intent.getStringExtra("id");
+        //int user_id = order.getUser_id();
+        int id = Integer.valueOf(user_id);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new BoxOfficeListAdapter();
+        mAdapter = new MyOrderAdaptor();
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(null);
 
-        mPresenter = new BoxOfficeActivityPresenterImpl();
-        mPresenter.register(this);
-        mPresenter.loadData();
-    }
+        orderpresenter = new OrderPresenterImpl(id);
+        orderpresenter.register(this);
+        orderpresenter.loadData();
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(com.cb.project.gracefulmovies.R.menu.box_office, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == com.cb.project.gracefulmovies.R.id.action_attention) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("提示");
-            builder.setView(com.cb.project.gracefulmovies.R.layout.layout_box_office_attention_dialog);
-            builder.setPositiveButton("好的", null);
-            builder.show();
-
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onRefresh() {
-        mPresenter.loadData();
+        orderpresenter.loadData();
         mAdapter.setLoading(true);
     }
 
     @Override
-    public void onDataReady(List<BoxOfficeModel> modelList) {
+    public void onDataReady(List<Order> modelList) {
         mSwipeRefreshLayout.setRefreshing(false);
         mAdapter.setData(modelList);
     }
@@ -122,8 +97,9 @@ public class BoxOfficeActivity extends BaseActivity implements SwipeRefreshLayou
     protected void onDestroy() {
         super.onDestroy();
 
-        mPresenter.unregister();
-        mPresenter = null;
-        ApiHelper.releaseBoxOfficeApi();
+
+        orderpresenter.unregister();
+        orderpresenter = null;
+        ApiHelper.releasePlanApi();
     }
 }

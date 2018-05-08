@@ -1182,7 +1182,7 @@ public class SeatTable extends View {
         invalidate();
     }
 
-    private int getRowNumber(int row){
+    public int getRowNumber(int row){
         int result=row;
         if(seatChecker==null){
             return -1;
@@ -1205,7 +1205,7 @@ public class SeatTable extends View {
         return result;
     }
 
-    private int getColumnNumber(int row,int column){
+    public int getColumnNumber(int row,int column){
         int result=column;
         if(seatChecker==null){
             return -1;

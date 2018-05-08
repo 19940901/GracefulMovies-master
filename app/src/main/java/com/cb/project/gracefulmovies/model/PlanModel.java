@@ -1,10 +1,24 @@
 package com.cb.project.gracefulmovies.model;
 
-public class PlanModel {
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
+public class PlanModel implements Serializable{
     private String startTime;
     private String sumTime;
     private int price;
     private String hall_Name;
+    @SerializedName("plan_id")
+    private String hall_id;
+
+    public String getHall_id() {
+        return hall_id;
+    }
+
+    public void setHall_id(String hall_id) {
+        this.hall_id = hall_id;
+    }
 
     public String getStartTime() {
         return startTime;
