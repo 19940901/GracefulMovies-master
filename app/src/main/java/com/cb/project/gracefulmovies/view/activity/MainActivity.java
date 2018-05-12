@@ -582,13 +582,13 @@ public class MainActivity extends CheckPermissionsActivity implements Navigation
             editor.putString("id", loginResult.getId());
             editor.putString("name", loginResult.getName());
             editor.commit();
-            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+           // android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
 
 
 
-            builder.setTitle("登录" + loginResult.getState());
+           // builder.setTitle("登录" + loginResult.getState());
 
-            builder.show();
+            //builder.show();
 
 
         } else {

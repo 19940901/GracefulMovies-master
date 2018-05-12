@@ -32,7 +32,12 @@ public class MyOrderAdaptor extends BaseRecyclerAdapter<Order,MyOrderAdaptor.ord
         holder.text3.setText(order.getSumtime());
         holder.text4.setText(order.getPrice()+"");
         holder.text5.setText(order.getState());
+        holder.text6.setText(order.getVerifyCode());
         holder.text7.setText(order.getOrder_id()+"");
+        holder.text8.setText(order.getHall_name()+"");
+        String[] seatNumber = order.getSeatNumber().split("-");
+        String seat=seatNumber[0]+"排"+seatNumber[1]+"座";
+        holder.text9.setText(seat);
     }
     @Override
     protected Animator[] getAnimators(View view) {
@@ -47,7 +52,7 @@ public class MyOrderAdaptor extends BaseRecyclerAdapter<Order,MyOrderAdaptor.ord
 
 
     class orderVH extends BaseRecyclerViewHolder{
-        TextView text1,text2,text3,text4,text5,text7;
+        TextView text1,text2,text3,text4,text5,text6,text7,text8,text9;
 
         public orderVH(View itemView) {
             super(itemView);
@@ -56,7 +61,10 @@ public class MyOrderAdaptor extends BaseRecyclerAdapter<Order,MyOrderAdaptor.ord
             this.text3=findView(R.id.order_text_3);
             this.text4=findView(R.id.order_text_4);
             this.text5=findView(R.id.order_text_5);
+            this.text6=findView(R.id.order_text_6);
             this.text7=findView(R.id.order_text_7);
+            this.text8=findView(R.id.order_text_8);
+            this.text9=findView(R.id.order_text_9);
 
         }
 

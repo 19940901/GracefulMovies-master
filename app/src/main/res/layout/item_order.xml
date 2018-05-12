@@ -147,7 +147,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-thin"
                 android:textColor="?android:textColorPrimary"
-                android:textSize="@dimen/text_size_12sp"
+                android:textSize="@dimen/text_size_18sp"
                 app:layout_constraintLeft_toLeftOf="@+id/guideline1"
                 app:layout_constraintRight_toLeftOf="@+id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/order_hint_2"
@@ -191,8 +191,10 @@
                 android:fontFamily="sans-serif-thin"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="@dimen/text_size_12sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="@+id/guideline1"
                 app:layout_constraintTop_toBottomOf="@+id/order_hint_4"
-                app:layout_constraintLeft_toRightOf="@+id/order_hint_7"
+
 
                 tools:text="12345"  />
 
@@ -204,7 +206,54 @@
                 android:textSize="@dimen/text_size_12sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="@+id/guideline1"
-                app:layout_constraintTop_toBottomOf="@+id/order_hint_4"/>
+                app:layout_constraintTop_toBottomOf="@+id/order_text_7"/>
+
+        <TextView
+                android:id="@+id/order_text_8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-thin"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="@dimen/text_size_12sp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline1"
+                app:layout_constraintRight_toRightOf="@+id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/order_hint_5"
+
+
+                tools:text="12345"  />
+
+        <TextView
+                android:id="@+id/order_hint_8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_order_hall"
+                android:textSize="@dimen/text_size_12sp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline1"
+                app:layout_constraintRight_toRightOf="@+id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/order_text_8"/>
+        <TextView
+                android:id="@+id/order_text_9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-thin"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="@dimen/text_size_12sp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline2"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/order_hint_4"
+
+
+                tools:text="12345"  />
+
+        <TextView
+                android:id="@+id/order_hint_9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_order_seat"
+                android:textSize="@dimen/text_size_12sp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline2"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/order_text_9"/>
 
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

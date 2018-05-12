@@ -146,7 +146,7 @@ public class MovieTableActivity extends BaseActivity {
         if (null != s && s.equals("ok")) {
 
             Intent intent = new Intent(this, MyOrderActivity.class);
-            intent.putExtra("id", order.getUser_id());
+            intent.putExtra("id", String.valueOf(order.getUser_id()));
             startActivity(intent);
 //            AlertDialog.Builder builder = new AlertDialog.Builder(this);
 //            builder.setTitle(seat + plan.getHall_id() + " " + id + " " + name);

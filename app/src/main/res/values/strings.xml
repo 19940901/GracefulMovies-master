@@ -88,6 +88,8 @@
     <string name="hint_order_price">影票价格</string>
     <string name="hint_order_state">订单状态</string>
     <string name="hint_order_verifyCode">取票码</string>
+    <string name="hint_order_hall">大厅</string>
+    <string name="hint_order_seat">座位</string>
 
 
     <string name="key_first_time">key_first_time</string>
